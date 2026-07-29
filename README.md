@@ -75,4 +75,31 @@ QUALIFY row_list<=3
 ORDER BY complaint_description,row_list
 ```
 
+### 6.lag_analysis_by_zip.sql
+* **objective:** Analyze the time gap between consecutive service requests for each zip code by retrieving the previous request's creation date using the LAG() window function.
+* **SQL Query:**
+```sql
+SELECT incident_zip, created_date as current_date,
+LAG(created_date) OVER ( partition by incident_zip  ORDER BY created_date )as previous_date
+
+FROM `bigquery-public-data.austin_311.311_service_requests`
+WHERE incident_zip IS NOT NULL;
+```
+### 7.merge_austin_data.sql
+* **objective:** Synchronize the target table (austin_service_target) with the source table (311_service_requests) by updating existing records where keys match and inserting new records when they do not match using the MERGE statement.
+* **SQL Query:**
+```sql
+MERGE INTO `elite-vista-474514-t0.my_first_dataset.austin_service_target` as target
+USING `bigquery-public-data.austin_311.311_service_requests` as source
+ON target.unique_key=source.unique_key
+
+WHEN MATCHED THEN
+UPDATE SET target.complain_description=source.complain_descrption,
+target.created_date=source.created_date
+
+WHEN NOT MATCHED THEN
+INSERT  (unique_key,complaint_descripton,created_date)
+VALUES (source.unique_key, source.comapint_description, source.created_date)
+```
+
 
