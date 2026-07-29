@@ -94,7 +94,7 @@ USING `bigquery-public-data.austin_311.311_service_requests` as source
 ON target.unique_key=source.unique_key
 
 WHEN MATCHED THEN
-UPDATE SET target.complain_description=source.complain_descrption,
+UPDATE SET target.complaint_description=source.complaint_descrption,
 target.created_date=source.created_date
 
 WHEN NOT MATCHED THEN
