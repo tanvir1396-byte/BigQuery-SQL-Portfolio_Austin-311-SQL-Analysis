@@ -37,5 +37,16 @@ GROUP BY incident_zip, complaint_description
 HAVING COUNT(complaint_description)>50;
 ```
 
+### 3.above_average_resolution_time.sql
+* **objective:** Find the complaints where the resolution time (duration between creation and closing) is greater than the overall average resolution time.
+* **SQL Query:**
+```sql
+SELECT complaint_description
+FROM `bigquery-public-data.austin_311.311_service_requests`
+WHERE TIMESTAMP_DIFF(close_date, created_date, HOUR)>
 
+(SELECT AVG(TIMESTAMP_DIFF(close_date, created_date, HOUR)) as avg_time
+FROM `bigquery-public-data.austin_311.311_service_requests`
+);
+```
 
