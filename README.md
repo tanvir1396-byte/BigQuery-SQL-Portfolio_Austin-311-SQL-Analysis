@@ -94,12 +94,12 @@ USING `bigquery-public-data.austin_311.311_service_requests` as source
 ON target.unique_key=source.unique_key
 
 WHEN MATCHED THEN
-UPDATE SET target.complaint_description=source.complaint_descrption,
+UPDATE SET target.complaint_description=source.complaint_description,
 target.created_date=source.created_date
 
 WHEN NOT MATCHED THEN
-INSERT  (unique_key,complaint_descripton,created_date)
-VALUES (source.unique_key, source.comapint_description, source.created_date)
+INSERT  (unique_key,complaint_description,created_date)
+VALUES (source.unique_key, source.complaint_description, source.created_date)
 ```
 
 
