@@ -49,4 +49,18 @@ WHERE TIMESTAMP_DIFF(close_date, created_date, HOUR)>
 FROM `bigquery-public-data.austin_311.311_service_requests`
 );
 ```
+### 4.top_busiest_zip_codes.sql
+* **objective:** Find the top 5 busiest zip codes based on the total number of service requests using a Common Table Expression (CTE).
+* **SQL Query:**
+```sql
+WITH newtable as (SELECT incident_zip, COUNT(complaint_description) as total_complain,
+FROM `bigquery-public-data.austin_311.311_service_requests`
+WHERE incident_zip IS NOT NULL
+GROUP BY incident_zip)
+
+SELECT incident_zip,total_complain
+FROM newtable
+ORDER BY total_complain DESC
+LIMIT 5;
+```
 
