@@ -63,4 +63,16 @@ FROM newtable
 ORDER BY total_complain DESC
 LIMIT 5;
 ```
+### 5.latest_complaints_by_type.sql
+* **objective:** Find the 3 most recent service requests for each complaint description based on the creation date using window functions (ROW_NUMBER() or RANK()) and the QUALIFY clause.
+* **SQL Query:**
+```sql
+SELECT complaint_description,created_date,
+ROW_NUMBER() OVER (partition by complaint_description ORDER BY created_date DESC)as row_list
+FROM `bigquery-public-data.austin_311.311_service_requests`
+
+QUALIFY row_list<=3
+ORDER BY complaint_description,row_list
+```
+
 
